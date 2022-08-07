@@ -6,6 +6,7 @@ session = HTMLSession()
 
 def get_all_forms(url):
   #Get Request
+  url = "https://"+url
   res = session.get(url)
   # for javascript driven website
   # res.html.render()
@@ -16,7 +17,7 @@ def get_form_details(form):
   """ Returns the HTML details of a form, including action, method, and list of form controls (inputs, etc)"""
   details={}
   #get the form action (requested URL)
-  action = form.attrs.get("action").lower()
+  action = form.attrs.get("action")
   # get the form method (POST, GET, DELETE, etc)
   #if not specified, GET is the default in HTML
   method = form.attrs.get("method", "get").lower()
@@ -35,10 +36,12 @@ def get_form_details(form):
   for select in form.find_all("select"):
     #get the name attribute
     select_name = select.attrs.get("name")
+    # set the type as select
+    select_type ="select1"
     select_options = []
     # the default select value
     select_default_value=""
-    #iterate over options and get teh value of each
+    #iterate over options and get the value of each
     for select_option in select.find_all("option"):
       # get the option value used to submit the form
       option_value = select_option.attrs.get("value")
@@ -47,12 +50,12 @@ def get_form_details(form):
         if select_option.attrs.get("selected"):
           # if 'selected attribute is set, set this option as default
           select_default_value = option_value
-    if not select_Default_value and select_options:
+    if not select_default_value and select_options:
     #if the default is not set, and there are options, take the first option as default
       select_default_value = select_options[0]
       # add the select to the inputs list
     inputs.append({"type": select_type, "name" : select_name, "values": select_options,"value": select_default_value})
-  for textarea in form.find_alle("textarea"):
+  for textarea in form.find_all("textarea"):
     # get the name attribute
     textarea_name=textarea.attrs.get("name")
     # set the type as textarea
@@ -74,9 +77,9 @@ if __name__ == "__main__":
   # get URL from the command line
   url = sys.argv[1]
   # get all from tags
-  form = get_all_forms(url)
+  forms = get_all_forms(url)
   # iteratte over forms
-  for i, form in enumerate (forms, start=1):
-    form_details = get_form_details(form)
+  for i, forms in enumerate (forms, start=1):
+    form_details = get_form_details(forms)
     print("="*50, f"form #{i}", "="*50)
     pprint(form_details)
