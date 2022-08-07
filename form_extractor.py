@@ -2,11 +2,17 @@ from bs4 import BeautifulSoup
 from requests_html import HTMLSession
 from pprint import pprint
 
+
 session = HTMLSession()
 
 def get_all_forms(url):
+  try: 
+    import ssl
+  except ImportError:
+    print("ERROR: Import not possible")
+
   #Get Request
-  url = "https://"+url
+  url = "http://"+url
   res = session.get(url)
   # for javascript driven website
   # res.html.render()
@@ -17,7 +23,7 @@ def get_form_details(form):
   """ Returns the HTML details of a form, including action, method, and list of form controls (inputs, etc)"""
   details={}
   #get the form action (requested URL)
-  action = form.attrs.get("action")
+  action = form.attrs.get("action").lower()
   # get the form method (POST, GET, DELETE, etc)
   #if not specified, GET is the default in HTML
   method = form.attrs.get("method", "get").lower()
