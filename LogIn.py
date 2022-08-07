@@ -1,6 +1,7 @@
 from selenium import webdriver
 from selenium.werbdriver.support.ui import WebDriverWait
 
+
 # Webpage Credentials
 
 username= ""
@@ -22,8 +23,7 @@ driver.find_element_by_name("commit").click()
 
 # wait the ready state to be complete
 WebDriverWait(driver=driver, timeout=10).until(
-  lambda x: x.execute_script("return document.readyState === 'complete'")
-  )
+  lambda x: x.execute_script("return document.readyState === 'complete'"))
 
 error_message = "Incorrect username or password."
 
